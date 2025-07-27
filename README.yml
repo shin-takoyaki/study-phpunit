@@ -1,0 +1,78 @@
+title: Laravel API Sample Project
+description: このリポジトリは、Laravelにおける外部APIの抽象化とPHPUnitによるAPIテストを組み合わせたサンプル実装です。外部API未完成の段階でもテスト可能なアーキテクチャを構築しています。
+
+---
+
+overview:
+  title: 概要
+  content: |
+    本プロジェクトは以下の3層構成に基づいています：
+    ブラウザ（未完成） → 自作API（本リポジトリ）→ 外部API（未完成）
+
+---
+
+features:
+  title: 特徴
+  items:
+    - 外部APIのインターフェース抽象化
+      - ExternalApiInterface を定義し、テスト・本番で切り替え可能
+    - DIコンテナによる自動バインディング
+      - 環境に応じて ApiClient または FakeApiClient を利用
+    - Featureテストによるブラウザ側のリクエストスタブ化
+      - 入力・出力を全てテストコード内で定義可能
+
+---
+
+directory_structure:
+  title: ディレクトリ構成（抜粋）
+  code: |
+    app/
+    ├── External/
+    │ ├── ExternalApiInterface.php
+    │ ├── ApiClient.php
+    │ └── FakeApiClient.php
+    ├── Services/
+    │ └── UserService.php
+    tests/
+    ├── Feature/
+    │ └── UserApiTest.php
+    ├── Stubs/
+    │ └── RequestStubs.php
+    routes/
+    └── api.php
+
+---
+
+how_to_run_tests:
+  title: テストの実行方法
+  description: プロジェクトルートで以下のコマンドを実行してください。
+  command: php artisan test --filter=UserApiTest
+  notes:
+    - --filter を使うことで、特定のテストクラスやメソッドだけを実行できます。
+    - Laravel 9以降では PHPUnit が組み込まれているため、追加インストール不要です。
+
+---
+
+test_case_details:
+  title: テストケースの内容
+  file: tests/Feature/UserApiTest.php
+  cases:
+    - type: 正常系
+      description: 正しい user_id を送信 → FakeApiClient がレスポンスを返す
+    - type: 異常系
+      description: user_id が空 → バリデーションエラー（422）
+
+---
+
+expansion_ideas:
+  title: 拡張案（今後追加可能な機能）
+  items:
+    - FakeApiClient に異常系レスポンスを動的に返す処理を追加
+    - PHPUnitに Mockery を組み合わせ、振る舞いテストを導入
+    - Postman や Insomnia との連携でフロント側の契約も検証
+
+---
+
+license:
+  title: ライセンス
+  name: MIT License
